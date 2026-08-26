@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/livewire/dist/**/*.js';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
+@theme {
+    --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'PT Mono', ui-monospace, monospace;
+    --color-bg: #0f0f0f;
+    --color-fg: #fdfdfd;
+    --color-ink: #0f0f0f;
+    --color-bone: #fdfdfd;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: var(--color-fg);
+    color: var(--color-bg);
+}
+
+body::after {
+    content: '';
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    opacity: 0.045;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+}
+
+.marquee {
+    overflow: hidden;
+    border-block: 1px solid color-mix(in srgb, var(--color-fg) 15%, transparent);
+}
+.marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 42s linear infinite;
+}
+.marquee__track span {
+    padding-inline: 2.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-fg) 55%, transparent);
+}
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+.wordmark {
+    font-weight: 500;
+    letter-spacing: -0.07em;
+    line-height: 0.82;
+    text-transform: lowercase;
+}
+
+/* Descenders on j/y/p/x sit below the em box at this line-height. */
+h1.wordmark {
+    padding-bottom: 0.2em;
+}
+
+.swatch {
+    aspect-ratio: 1;
+    width: 100%;
+}
+
+/* —— opening title sequence —— */
+html.opener-lock {
+    overflow: hidden;
+}
+.opener {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: #0f0f0f;
+    overflow: hidden;
+    color: #fdfdfd;
+    opacity: 1;
+}
+.opener--off {
+    display: none !important;
+}
+.opener.is-done {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+.opener__shots {
+    position: absolute;
+    inset: 0;
+}
+.opener__shot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    pointer-events: none;
+}
+.opener__shot.is-on {
+    opacity: 1;
+}
+.opener__mark {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background: linear-gradient(to top, rgb(15 15 15 / 0.45), rgb(15 15 15 / 0.12) 40%, rgb(15 15 15 / 0.2));
+}
+.opener__mark span {
+    font-size: clamp(4.5rem, 20vw, 18rem);
+    font-weight: 500;
+    letter-spacing: -0.08em;
+    line-height: 0.82;
+    padding-bottom: 0.12em;
+    text-transform: lowercase;
+    color: #fdfdfd;
+    opacity: 0;
+}
+.opener.is-live .opener__mark span {
+    animation: mark-in 0.7s ease 0.12s forwards;
+}
+@keyframes mark-in {
+    to { opacity: 1; }
+}
+.opener__meta {
+    position: absolute;
+    z-index: 5;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    color: #fdfdfd;
+}
+.opener__meta--tl { top: 1.4rem; left: 4vw; }
+.opener__meta--tr { top: 1.4rem; right: 4vw; }
+.opener__meta--br {
+    bottom: 1.4rem;
+    right: 4vw;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+.opener.is-skippable .opener__meta--br {
+    opacity: 1;
+    pointer-events: auto;
+}
+.opener__bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 6;
+    height: 2px;
+    width: 0;
+    background: #fdfdfd;
+}
+.opener.is-live .opener__bar {
+    animation: opener-bar var(--opener-dur, 5000ms) linear forwards;
+}
+@keyframes opener-bar {
+    to { width: 100%; }
+}
+/* —— ink wipe: boot loader + page transitions —— */
+.wipe {
+    position: fixed;
+    inset: 0;
+    z-index: 95;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 2rem 4vw;
+    background: var(--color-bg);
+    pointer-events: none;
+}
+.wipe--off {
+    display: none !important;
+}
+.wipe--out {
+    transform: translateY(-102%);
+    transition: transform 0.9s cubic-bezier(0.76, 0, 0.18, 1);
+}
+.wipe--below {
+    transform: translateY(102%);
+}
+.wipe--covering {
+    transform: translateY(0);
+    transition: transform 0.55s cubic-bezier(0.76, 0, 0.18, 1);
+}
+.wipe__count {
+    font-family: var(--font-mono);
+    font-size: clamp(1.6rem, 5vw, 3.2rem);
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-fg);
+}
+.wipe--below .wipe__count,
+.wipe--covering .wipe__count {
+    display: none;
+}
+
+.scroll-cue {
+    display: inline-block;
+    animation: cue-drop 1.8s cubic-bezier(0.76, 0, 0.18, 1) infinite;
+}
+@keyframes cue-drop {
+    0%, 100% { transform: translateY(-3px); }
+    50% { transform: translateY(3px); }
+}
+
+.ig-play {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.45rem;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 0 5px 8px;
+    border-color: transparent transparent transparent #fdfdfd;
+    filter: drop-shadow(0 0 4px rgb(0 0 0 / 0.55));
+}
+
+.hero-still.is-ken {
+    animation: ken 28s ease-in-out infinite alternate;
+}
+@keyframes ken {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .opener, .wipe { display: none !important; }
+    .hero-still, .marquee__track, .scroll-cue { animation: none !important; }
+}
