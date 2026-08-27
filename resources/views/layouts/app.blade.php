@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'jenyapix — Jenya Mironov')</title>
     <meta name="description" content="@yield('description', 'jenyapix is the personal brand of Jenya Mironov, New York City photographer and filmmaker. Archive, Instagram, and JPX Studios.')">
+    @if (\Eshlink\Cms\Support\HostMode::isProduction(request()))
     <link rel="canonical" href="{{ url()->current() }}">
+    @else
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    @endif
     @fonts
     @stack('head')
     <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
